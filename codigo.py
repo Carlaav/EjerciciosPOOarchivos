@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def get_exams_and_attendance(file):
+def examenes_y_asistencia(file):
     data = pd.read_csv(file, sep=";")
     print(data.info)
     data = data.sort_values(by=["Apellidos"])
@@ -21,27 +21,27 @@ def get_exams_and_attendance(file):
         lista.append(diccionario)
     return lista
 
-def calculate_average(lista):
-    average = 0
+def calcular_media(lista):
+    media = 0
     for i in range(len(lista)):
         lista[i]["NotaMedia"] = float(lista[i]["Parcial1"]) * 0.3 + float(lista[i]["Parcial2"]) * 0.3 + float(lista[i]["Practicas"]) * 0.4
-        average += lista[i]["NotaMedia"]
+        media += lista[i]["NotaMedia"]
 
     return lista
 
-def get_passed_and_failed(lista):
-    passed = []
-    failed = []
+def suspensos_y_aprobados(lista):
+    aprobado = []
+    suspenso = []
     for i in range(len(lista)):
         if float(lista[i]["Asistencia"].replace("%", "")) >= 75 and float(lista[i]["Parcial1"]) >= 4 and float(lista[i]["Parcial2"]) >= 4 and float(lista[i]["Practicas"]) >= 4 and float(lista[i]["NotaMedia"]) >= 5:
             nombre = lista[i]["Nombre"] + " " + lista[i]["Apellidos"]
-            passed.append(nombre)
+            suspenso.append(nombre)
         else:
             nombre = lista[i]["Nombre"] + " " + lista[i]["Apellidos"]
-            failed.append(nombre)
-    return passed, failed
+            suspenso.append(nombre)
+    return aprobado, suspenso
 
-a = calculate_average(get_exams_and_attendance("copilot\calificaciones.csv"))
-aprobados, suspensos = get_passed_and_failed(a)
+a = calcular_media(examenes_y_asistencia("EjerciciosPOOarchivos\calificaciones (1).csv"))
+aprobados, suspensos = suspensos_y_aprobados(a)
 print(aprobados)
 print(suspensos)
